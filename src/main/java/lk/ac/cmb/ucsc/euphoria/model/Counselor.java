@@ -62,4 +62,12 @@ public class Counselor {
     public void setCounselor_id(long counselor_id) {
         this.counselor_id = counselor_id;
     }
+
+    @Override
+    public String toString() {
+        return "Counselor{" +
+                "counselor_id=" + counselor_id +
+                ", counselor_name='" + counselor_name + '\'' +
+                '}';
+    }
 }
