@@ -3,7 +3,7 @@ package lk.ac.cmb.ucsc.euphoria.controller;
 
 import lk.ac.cmb.ucsc.euphoria.dto.CounselorRequestDTO;
 import lk.ac.cmb.ucsc.euphoria.model.*;
-import lk.ac.cmb.ucsc.euphoria.service.UserService;
+import lk.ac.cmb.ucsc.euphoria.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ import java.util.List;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @PostMapping(path = "/counselorrequest", consumes = "application/json", produces = "application/json")
@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping(path = "/getCounselors", produces = "application/json")
     public List<Counselor> getCounselors() {
         logger.info("HIT - /counselor/getCounselors  GET");
-        return userService.getCounselors();
+        return userServiceImpl.getCounselors();
     }
 
 
@@ -45,7 +45,7 @@ public class UserController {
     public void addPost(@RequestBody @Valid @NonNull Post post) {
         logger.info("HIT - /counselor/newpost  POST | Post Title : {} | Post Body : {} ",
                 post.getPostTitle(), post.getPostBody());
-        userService.addPost(post);
+        userServiceImpl.addPost(post);
     }
 
     @PostMapping(path = "/signin", consumes = "application/json", produces = "application/json")
@@ -58,7 +58,7 @@ public class UserController {
 //            }else{
 //                return ResponseEntity.ok(false);
 //            }
-            return userService.signIn(password);
+            return userServiceImpl.signIn(password);
         }catch(Exception e){
             e.printStackTrace();
             return null;
@@ -68,7 +68,7 @@ public class UserController {
     public ResponseEntity<Boolean> quickSignUp(@RequestBody @Valid @NonNull User user) {
         logger.info("HIT - /counselor/quicksignup  POST | First Name : {} | Last Name: {}", user.getFirst_name(), user.getLast_name());
         try{
-            if(userService.quickSignUp(user)){
+            if(userServiceImpl.quickSignUp(user)){
 
                 return ResponseEntity.ok(true);
             }else{
@@ -85,7 +85,7 @@ public class UserController {
     public ResponseEntity<Boolean> formalSignUp(@RequestBody @Valid @NonNull User user) {
         logger.info("HIT - /counselor/formalsignup  POST | First Name : {} | Last Name: {}", user.getFirst_name(), user.getLast_name());
         try{
-            if(userService.formalSignUp(user)){
+            if(userServiceImpl.formalSignUp(user)){
                 return ResponseEntity.ok(true);
             }else{
                 return ResponseEntity.ok(false);
@@ -100,7 +100,7 @@ public class UserController {
     public ResponseEntity<Boolean> requestCounselor(@RequestBody @Valid @NonNull CounselorRequestDTO counselorRequest) {
         logger.info("HIT - /counselor/requestcounselor  POST | User Id : {} ", counselorRequest.getUser_id());
         try{
-            return userService.requestCounselor(counselorRequest);
+            return userServiceImpl.requestCounselor(counselorRequest);
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.ok(false);
