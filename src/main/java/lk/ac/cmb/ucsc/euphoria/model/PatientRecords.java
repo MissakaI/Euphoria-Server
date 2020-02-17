@@ -18,7 +18,7 @@ public class PatientRecords extends SuperEntity {
     @ManyToOne(cascade = CascadeType.DETACH)
     private Counselor counselor;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private User user;
 
     @Type(type = "json")
@@ -29,8 +29,7 @@ public class PatientRecords extends SuperEntity {
     @Column(columnDefinition = "json")
     private JSONObject prescription;
 
-    public PatientRecords() {
-    }
+    public PatientRecords() { }
 
     public String getTitle() {
         return title;
