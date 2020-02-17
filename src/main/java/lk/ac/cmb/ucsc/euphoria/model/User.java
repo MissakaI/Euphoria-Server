@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Entity
 public class User {
@@ -11,12 +12,13 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long uid;
 
-    private String title;
+
     private String first_name;
     private String last_name;
+    private String gender;
     @NotBlank
     private String email;
-    @NotBlank
+
     @Transient
     private String password;
     private int contact_number;
@@ -25,30 +27,43 @@ public class User {
     private String city;
     private String district;
 
-    private String status;//whether online or not
+    private String status;//whether online or not_online
     private String account_type;//quick or formal
+    private String activated;//initial activation upon registration
+    private boolean deleted;//whether the account is deleted or not
     /******/
-    private String date;
+    private Date timestamp=new Date();
+
+    private String pic_name;
 
 
     public User() {
     }
 
     public User(
-            long uid, @JsonProperty("title") String title,
+           long uid,
+            @JsonProperty("gender") String gender,
             @JsonProperty("firstname") String first_name,
             @JsonProperty("lastname") String last_name,
             @JsonProperty("email") @NotBlank String email,
-            @JsonProperty("password") @NotBlank String password,
+            @JsonProperty("password")String password,
             @JsonProperty("contactNumber") int contact_number,
             @JsonProperty("dob") String date_of_birth,
             @JsonProperty("nic") String nic,
             @JsonProperty("city") String city,
             @JsonProperty("district") String district,
-            @JsonProperty("accountType") String account_type) {
+            @JsonProperty("accountType") String account_type,
+            @JsonProperty("pic_name") String pic_name,
+            @JsonProperty("activated") String activated,
+            @JsonProperty("deleted") Boolean deleted,
+            @JsonProperty("status") String status
+
+
+
+            ) {
         this.uid = uid;
 
-        this.title = title;
+        this.gender = gender;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
@@ -60,18 +75,38 @@ public class User {
         this.district = district;
         this.status = status;
         this.account_type = account_type;
+        this.pic_name=pic_name;
+        this.activated=activated;
+        this.deleted=deleted;
+        this.timestamp=new Date();
     }
 
     public void setUid(long uid) {
         this.uid = uid;
     }
 
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public String getActivated() {
+        return activated;
+    }
+
+    public void setActivated(String activated) {
+        this.activated = activated;
+    }
+
+    public String getPic_name() {
+        return pic_name;
+    }
+
     public long getUid() {
         return uid;
     }
 
-    public String getTitle() {
-        return title;
+    public String getGender() {
+        return gender;
     }
 
     public String getFirst_name() {
@@ -118,5 +153,15 @@ public class User {
         return account_type;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 }
