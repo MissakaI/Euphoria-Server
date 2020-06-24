@@ -1,7 +1,5 @@
 package lk.ac.cmb.ucsc.euphoria.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -13,16 +11,16 @@ public class User {
     private long uid;
 
 
-    private String first_name;
-    private String last_name;
+    private String firstname;
+    private String lastname;
     private String gender;
     @NotBlank
     private String email;
 
     @Transient
     private String password;
-    private int contact_number;
-    private String date_of_birth;
+    private int contactNumber;
+    private String dob;
     private String nic;
     private String city;
     private String district;
@@ -41,32 +39,34 @@ public class User {
     }
 
     public User(
-            long uid,
-            @JsonProperty("gender") String gender,
-            @JsonProperty("firstname") String first_name,
-            @JsonProperty("lastname") String last_name,
-            @JsonProperty("email") @NotBlank String email,
-            @JsonProperty("password") String password,
-            @JsonProperty("contactNumber") int contact_number,
-            @JsonProperty("dob") String date_of_birth,
-            @JsonProperty("nic") String nic,
-            @JsonProperty("city") String city,
-            @JsonProperty("district") String district,
-            @JsonProperty("accountType") String account_type,
-            @JsonProperty("pic_name") String pic_name,
-            @JsonProperty("activated") String activated,
-            @JsonProperty("deleted") Boolean deleted,
-            @JsonProperty("status") String status
+
+            String gender,
+            String firstname,
+            String lastname,
+            String email,
+            String password,
+            int contactNumber,
+            String dob,
+            String nic,
+            String city,
+            String district,
+            String account_type,
+            String pic_name,
+            String activated,
+            Boolean deleted,
+            String status
+
+
     ) {
-        this.uid = uid;
+
 
         this.gender = gender;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.contact_number = contact_number;
-        this.date_of_birth = date_of_birth;
+        this.contactNumber = contactNumber;
+        this.dob = dob;
         this.nic = nic;
         this.city = city;
         this.district = district;
@@ -80,24 +80,24 @@ public class User {
 
     public User(
             String gender,
-            String first_name,
-            String last_name,
+            String firstName,
+            String lastName,
             String email,
             String password,
-            int contact_number,
-            String date_of_birth,
+            int contactNumber,
+            String dob,
             String nic,
             String city,
             String district,
             String account_type
     ) {
         this.gender = gender;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstname = firstName;
+        this.lastname = lastName;
         this.email = email;
         this.password = password;
-        this.contact_number = contact_number;
-        this.date_of_birth = date_of_birth;
+        this.contactNumber = contactNumber;
+        this.dob = dob;
         this.nic = nic;
         this.city = city;
         this.district = district;
@@ -133,12 +133,12 @@ public class User {
         return gender;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastname() {
+        return lastname;
     }
 
     public String getEmail() {
@@ -149,12 +149,12 @@ public class User {
         return password;
     }
 
-    public int getContact_number() {
-        return contact_number;
+    public int getContactNumber() {
+        return contactNumber;
     }
 
-    public String getDate_of_birth() {
-        return date_of_birth;
+    public String getDob() {
+        return dob;
     }
 
     public String getNic() {
@@ -185,7 +185,15 @@ public class User {
         this.deleted = deleted;
     }
 
+    public void setPic_name(String pic_name) {
+        this.pic_name = pic_name;
+    }
+
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setAccount_type(String account_type) {
+        this.account_type = account_type;
     }
 }

@@ -5,6 +5,7 @@ import lk.ac.cmb.ucsc.euphoria.dto.CommentDTO;
 import lk.ac.cmb.ucsc.euphoria.dto.CounselorRequestDTO;
 import lk.ac.cmb.ucsc.euphoria.dto.PasswordChangeDTO;
 import lk.ac.cmb.ucsc.euphoria.dto.PostDTO;
+import lk.ac.cmb.ucsc.euphoria.dto.*;
 import lk.ac.cmb.ucsc.euphoria.model.*;
 import lk.ac.cmb.ucsc.euphoria.model.counselor.Counselor;
 import lk.ac.cmb.ucsc.euphoria.repository.*;
@@ -37,6 +38,10 @@ public class UserService {
     private PostRepository postRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private RatedRepository ratedRepository;
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     private String link="http://localhost:3000/user/verifyaccount";
 
@@ -90,6 +95,7 @@ public class UserService {
             emailService.sendSimpleMessage(user.getEmail(),"Welcome to Euphoria","Please click the following link to verify your account \n"+link+"/"+user.getEmail());
 
             user.setActivated("no");
+            user.setAccount_type("quick");
             User us=userRepository.save(user);
             if (pw == null & us==null) {
                 return false;
@@ -106,8 +112,7 @@ public class UserService {
     }
 
     //can use this later when the user decides to  fill in the formal data
-    public boolean
-    formalSignUp(User user) {
+    public boolean formalSignUp(User user) {
         Optional<Password> existing= passwordRepository.findById(user.getEmail());
 
         if(existing.isEmpty()){
@@ -124,6 +129,8 @@ public class UserService {
 
 
         user.setActivated("yes");
+        user.setPic_name("me");
+        user.setAccount_type("formal");
         User us=userRepository.save(user);
         if ( us==null) {
             return false;
@@ -265,5 +272,53 @@ public class UserService {
 
     public List<AppointmentRequest> getRequests() {
         return (List<AppointmentRequest>) appointmentRequestRepository.findAll();
+    }
+
+    public List<Rated> getRated() {
+        return (List<Rated>) ratedRepository.findAll();
+    }
+
+    public Counselor rateCounselor(RateDTO rate) {
+        System.out.println("rate service");
+        Counselor coun=counselorRepository.findById(rate.getCounselorId()).get();
+        coun.setRatedTimes(coun.getRatedTimes()+1);
+        float new_rate=(float) (rate.getRate()+coun.getRating())/5;
+        coun.setRating(new_rate);
+
+        User us=new User();
+        us.setUid(rate.getUserId());
+
+        Counselor co=new Counselor();
+        co.setId(rate.getCounselorId());
+
+        RateIdentity rid=new RateIdentity();
+        rid.setUser_id(us);
+        rid.setCounselor_id(co);
+
+        Rated old=ratedRepository.findById(rid).get();
+        old.setRated("yes");
+        ratedRepository.save(old);
+
+        return counselorRepository.save(coun);
+    }
+
+    public List<Payment> getPayment() {
+        return (List<Payment>) paymentRepository.findAll();
+    }
+
+    public Payment updatePayment(RateDTO payment) {
+        User us=new User();
+        us.setUid(payment.getUserId());
+
+        Counselor co=new Counselor();
+        co.setId(payment.getCounselorId());
+
+        RateIdentity rid=new RateIdentity();
+        rid.setUser_id(us);
+        rid.setCounselor_id(co);
+
+        Payment temp=paymentRepository.findById(rid).get();
+        temp.setPaymentStatus("paid");
+        return paymentRepository.save(temp);
     }
 }
